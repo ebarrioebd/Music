@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imagen Centrada y Fondo</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <div id="container" class="container">
+
+  </div>
+
+  <div class="menu">
+    <div class="button-menu">
+      <button onclick="abrirVentanaAdd()" class="button" id="bMenu">≡</button>
+    </div>
+    <div class="button-config">
+      <button onclick="abrirVentanaConfig()" class="button" id="bConfig">°°°</button>
+    </div>
+  </div>
+  <div class="caratula">
+    <div id="reproducStyle" class="reproducStyle">
+      <div class="img-caratula">
+        <img id="imgCaratula" src="" alt="Imagen centrada">
+      </div>
+      <div>
+        <marquee id="audioName">Desconocido</marquee>
+
+      </div>
+      <audio crossorigin="anonymous" style="display: none;" id="audio" preload="auto" controls>
+        <source id="audioSource"
+          src="https://dl.dropboxusercontent.com/scl/fi/qknhtkk1kxv56scs3pppz/y2mate.com-MARQUINHA-DE-FITA-SLOWED-REVERB-TIKTOK-VIRAL.mp3?rlkey=9jqutub4ttdtl9es6q80txtdj&st=npo82xoy" />
+      </audio>
+      <div class="range-music" style="color: white;">
+        <div class="timeCourrent">
+          <span id="currentTimeMin">00</span>:<span id="currentTime">0</span>
+        </div>
+        <div class="range">
+          <input type="range" id="range" value="0" min="0" max="100">
+        </div>
+        <div class="timeTotal">
+          <span style="color: white;" id="totalTimeMin">0</span>:<span id="totalTimeSeg"></span>
+        </div>
+      </div>
+      <div class="buttonsActions">
+        <div class="bAtras">
+          <button class="button" id="bAtras"> <img class="imgAtras" src="/img/adelante1.png"></button>
+        </div>
+
+        <div>
+          <button class="button" id="playOpause"><img id="img_play_pause" src="/img/play.png"></button>
+        </div>
+
+        <div>
+          <button class="button" id="bAdelante"> <img class="imgAdelante" src="/img/adelante1.png"> </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="divCanvasFrecuency">
+    <canvas id="canvas"></canvas>
+  </div>
+
+
+  <div id="ventanaConfig" style="display: none;" class="ventanaConfig">
+    <div class="blurConfig">
+
+    </div>
+    <div class="seccion-config">
+
+      <div style="text-align: end;">
+        <button onclick="cerrarVentanaConfig()">X</button>
+      </div>
+      <div>
+        <h4 id="valueTextBlur">Blur:(5px)</h4>
+        <input onchange="cambiarBlur(this.value)" id="rangeBlur" min="0" max="20" step="1" value="5" dir=""
+          type="range">
+      </div>
+      <div>
+        <h4>Seleccione el fondo</h4>
+        <select  onchange="cambiarFondo(this.value)" id="select_img">
+          
+        </select>
+      </div>
+      <div>
+        <h4>Seleccionar color Frecuencia:</h4>
+        <input onchange="seleccionarColor(this.value)" type="color" id="color">
+      </div>
+      <div>
+        <button onclick="actualizarDatos()">actualizarDatos</button>
+      </div>
+    </div>
+  </div>
+  <div style="display:none;" id="ventanaAdd" class="ventanaConfig">
+    <div class="blurConfig">
+    </div>
+    <div class="seccion-config">
+      <div style="text-align: end;">
+        <button onclick="cerrarVentanaAdd()">X</button>
+      </div>
+      <div>
+      <h3>Agregar URL de dropbox:</h3>
+      <h4>Nombre:</h4>
+      <input value="" required id="nombreAudio" placeholder="Nombre del Audio">
+      <h4>URL:</h4>
+      <input required id="urlAudio" placeholder="Url del Audio" name="urlAudio" value="" ><br>
+      <button id="addUrlAudio()" onclick="addUrlMusic()">Add</button>
+    </div>
+    <div>
+      <h3>Agregar img</h3>
+      <input id="urlImg" placeholder="url Imagen">
+      <button onclick="addUrlImg()">add img</button>
+    </div>
+    </div>
+  </div>
+  <input style="display:none;" type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+
+
+  <script src="/javascripts/main.js"></script>
+  <script src="/javascripts/postData.js"></script>
+</body>
+
+</html>

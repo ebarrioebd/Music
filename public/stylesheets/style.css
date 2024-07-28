@@ -1,0 +1,210 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  filter: blur(0px);
+  background-image:"";
+  background-size: cover;
+  /* La imagen de fondo cubre todo el contenedor */
+  background-position: center;
+  /* Centra la imagen de fondo */
+  background-repeat: no-repeat;
+  /* No repite la imagen de fondo */
+}
+
+.menu {
+  top: 0;
+  position: absolute;
+  border-radius: 30px;
+  width: -webkit-fill-available;
+  height: 5vh;
+  display: flex;
+}
+
+.button-menu {
+  width: 50%;
+
+}
+
+.button-config {
+  width: 50%;
+  text-align: end;
+
+}
+
+#bConfig,
+#bMenu {
+  color: white;
+
+}
+
+.caratula {
+  /* background: radial-gradient(black, #00000001); */
+  width: 100%;
+  height: 95vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  top: 5vh;
+  position: absolute;
+
+}
+
+.reproducStyle {
+  color: white;
+  width: 250px;
+  border-radius: 30px;
+  background: radial-gradient(#ffffff45, #ffffff75);
+  /* background: radial-gradient(black, #00000002); */
+  /* background: black; */
+  height: auto;
+  display: grid;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.reproducStyle>div {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.img-caratula {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+img {
+  border-radius: 10px;
+  margin-top: 10px;
+  width: 80%;
+  height: auto;
+}
+
+.range-music {
+  width: 90%;
+  display: flex;
+}
+
+.timeCourrent {
+  width: 12%;
+}
+
+.range {
+  display: flex;
+  justify-content: center;
+  width: 76%;
+}
+
+#range {
+  width: 90%;
+}
+
+.timeTotal {
+  width: 12%;
+}
+
+.volume-containerb {
+  border-top: 1000px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+}
+
+.buttonsActions {
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.button {
+  width: 40px;
+  height: 40px;
+  border: unset;
+  background: transparent;
+}
+
+#volumeControl {
+  width: 150px;
+  /* Ancho del control deslizante antes de la rotación */
+  transform: rotate(-90deg);
+  /* Rotar el control 90 grados en sentido antihorario */
+  transform-origin: center;
+}
+
+.imgAtras {
+  filter: invert(1);
+  width: 100%;
+  height: auto;
+  transform: rotate(180deg);
+}
+
+.imgAdelante {
+  filter: invert(1);
+  width: 100%;
+  height: auto;
+}
+
+#img_play_pause {
+  filter: invert(1);
+  width: 100%;
+  height: auto;
+}
+
+#adelante :hover img {
+  box-shadow: 0px 0px 10px 7px rgba(0, 0, 0, 0.6);
+  border-radius: 23px;
+}
+
+.divCanvasFrecuency {
+  display: flex;
+  width: -webkit-fill-available;
+  position: fixed;
+  top: 85vh;
+  justify-content: center;
+}
+
+#canvas {
+  width: 80%;
+  height: 10vh;
+}
+
+.ventanaConfig {
+  height: 95vh;
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+  top: 5vh;
+  position: fixed;
+  z-index: 100;
+  display: grid;
+  align-items: center; 
+}
+
+.blurConfig {  
+    /* background-image: url(/img/img2.jpg); */
+    /* background-repeat: round; */
+    background: #000000;
+    /* border: solid; */
+    position: absolute;
+}
+.seccion-config{
+  color: white  ;
+  position: relative;
+  /* background: white; */
+}
+.seccion-config,.blurConfig{
+  width: 100%;
+  height: 60vh;
+padding: 10px;
+border-radius: 20px;
+}
