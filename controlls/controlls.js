@@ -4,20 +4,13 @@ const Musics_url = require("../models/music_url");
 const Config = require("../models/config");
 const UrlImg = require("../models/urlImg");
 
-
-function insertDB(req, res) {
-    //const dataSave = { id: req.body.id, colorFrecuencia: "white", imgFondo: "/img/img4.jpg", blurFondo: 5 }
-    res.send({ msg: "echos" })
-}
 async function buscarDB(req, res) {
-    const data = await Musics_url.find({});
-    console.log(data);
+    const data = await Musics_url.find({}); 
     res.send(data);
 
 }
 async function buscarConfig(req, res) {
-    const data = await Config.find({});
-    console.log(data);
+    const data = await Config.find({}); 
     res.send(data);
 }
 async function buscarImgs(req, res) {
@@ -25,9 +18,9 @@ async function buscarImgs(req, res) {
     console.log("UrlImgUrlImg::",data);
     res.send(data);
 } 
-async function actualizarConfig(req,res){
-    //1b3b41fc34d2453ccf321dce_1
-    console.log(req.body)
+
+
+async function actualizarConfig(req,res){ 
     await Config.findOneAndUpdate({id:"1b3b41fc34d2453ccf321dce_1"},req.body)
     .then((user )=>{
         console.log('Dato actualizado:', user);
