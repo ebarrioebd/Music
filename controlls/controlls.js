@@ -1,70 +1,61 @@
-const Datastore = require('nedb');
-const db = new Datastore({ filename: './bd/basedata.db', autoload: true });
 
-const id = "1b3b41fc34d2453ccf321dce_1";
+
+const Musics_url = require("../models/music_url");
+const Config = require("../models/config");
+const UrlImg = require("../models/urlImg");
+
 
 function insertDB(req, res) {
     //const dataSave = { id: req.body.id, colorFrecuencia: "white", imgFondo: "/img/img4.jpg", blurFondo: 5 }
-    const dataSave = req.body;
-    console.log("dataSave:",dataSave);
-    db.insert(dataSave, (err, newDoc) => {
-        if (err) {
-            console.log('Error inserting document:', err);
-        } else {
-            console.log('Inserted document:', newDoc);
-            res.send( {data:newDoc})
-        }
-    }); 
-    //res.send({msg:"echos"})
+    res.send({ msg: "echos" })
 }
-function buscarDB(req, res) {
-    dato = db.find({ id: req.body.id }, (err, docs) => {
-        if (err) {
-            console.log('Error finding documents:', err);
-        } else {
-            console.log('Found documents:', docs);
-            res.send(docs);
-        }
-    });
+async function buscarDB(req, res) {
+    const data = await Musics_url.find({});
+    console.log(data);
+    res.send(data);
 
 }
-function actualizarDB(req, res) {
-    let dat = req.body
-    console.log(req.body);
-    db.update(
-        { id: dat.id },
-        {
-            $set: {
-                colorFrecuencia: dat.data.colorFrecuencia,
-                imgFondo: dat.data.imgFondo,
-                blurFondo: dat.data.blurFondo
-            }
-        }, {}, (err, numReplaced) => {
-            if (err) {
-                console.log('Error updating document:', err);
-            } else {
-                console.log('Number of documents updated:', numReplaced);
-            }
-        });
-    res.send({})
+async function buscarConfig(req, res) {
+    const data = await Config.find({});
+    console.log(data);
+    res.send(data);
 }
-function eliminarDB(req, res) {
-    db.remove({ name: 'Alice' }, {}, (err, numRemoved) => {
-        if (err) {
-            console.log('Error removing document:', err);
-        } else {
-            console.log('Number of documents removed:', numRemoved);
-        }
+async function buscarImgs(req, res) {
+    const data =await UrlImg.find({});
+    console.log("UrlImgUrlImg::",data);
+    res.send(data);
+} 
+async function actualizarConfig(req,res){
+    //1b3b41fc34d2453ccf321dce_1
+    console.log(req.body)
+    await Config.findOneAndUpdate({id:"1b3b41fc34d2453ccf321dce_1"},req.body)
+    .then((user )=>{
+        console.log('Dato actualizado:', user);
+        res.send({msg:"Echo"})
+    })
+    .catch((err) =>{ 
+        console.error('Error al actualizar usuario', err)
+        res.send({err:err})
     });
 }
-function eliminarSolo(id){
-    db.remove({ _id: id }, {}, (err, numRemoved) => {
-        if (err) {
-            console.log('Error removing document:', err);
-        } else {
-            console.log('Number of documents removed:', numRemoved);
-        }
+async function addUrlMusicDropbox(req,res){
+    await Musics_url(req.body).save()
+    .then(() => {
+        console.log('Url music agregada...', req.body);
+        res.send({msg:"Echo"})
+    })
+    .catch(err => {console.error('Error al crear Musics_url', err);
+        res.send({msg:err})
     });
 }
-//eliminarSolo("NmQOVtZNvx4QT2gw");
-module.exports = { insertDB, actualizarDB, buscarDB, eliminarDB };
+async function addUrlImage(req,res){
+    await UrlImg(req.body).save()
+    .then(() => {
+        console.log('Url UrlImg agregada...', req.body);
+        res.send({msg:"Echo"})
+    })
+    .catch(err => {console.error('Error al crear UrlImg', err);
+        res.send({msg:err})
+    });
+}
+module.exports = { buscarDB, buscarConfig,buscarImgs,actualizarConfig,addUrlMusicDropbox,addUrlImage};

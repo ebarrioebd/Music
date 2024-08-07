@@ -1,9 +1,12 @@
 
+let img_index = 0;
+
 function addImgSelect(data) {
     const selcect = document.getElementById("select_img");
     for (let i = 0; i < data.length; i++) {
         selcect.innerHTML+= `<option value="${data[i].urlImg}">img${i}.jpg</option>`
         console.log(data[i]);
+        img_index++;
     }
 }
 function getImgs() {
@@ -21,6 +24,7 @@ function getImgs() {
             return response.json(); // Si el servidor devuelve JSON, parsea el cuerpo de la respuesta
         })
         .then(data => {
+            console.log("dataimgs_urls::",data)
             addImgSelect(data);
         })
         .catch((error) => {
@@ -59,7 +63,7 @@ function getMusic() {
         })
         .then(data => {
             music_url = data;
-            console.log(data)
+            console.log(data);
             cargarAudio();
         })
         .catch((error) => {
@@ -72,6 +76,7 @@ const DataBD = {
     colorFrecuencia: "",
     imgFondo: "",
     blurFondo: 0,
+    id: '1b3b41fc34d2453ccf321dce_1'
 }
 
 const audio = document.getElementById('audio');
