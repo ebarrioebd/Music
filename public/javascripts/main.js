@@ -1,8 +1,12 @@
 
 let img_index = 0;
+let isPause = true;
+let index_music = 0;
+
 
 function addImgSelect(data) {
-    const selcect = document.getElementById("select_img");
+    const selcect = document.getElementById("select_img"); 
+    cambiarFondo(data[0].urlImg);
     for (let i = 0; i < data.length; i++) {
         selcect.innerHTML+= `<option value="${data[i].urlImg}">img${i}.jpg</option>`
         console.log(data[i]);
@@ -63,8 +67,9 @@ function getMusic() {
         })
         .then(data => {
             music_url = data;
+            actualizarLista();
+            //cargarAudio(0); 
             console.log(data);
-            cargarAudio();
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -84,13 +89,16 @@ const audioSource = document.getElementById('audioSource');
 
 const audioNameDisplay = document.getElementById('audioName');
 
-function cargarAudio() {
-
-    audioSource.src = music_url[0].url;
+function cargarAudio(id) {
+    isPause=false;
+    let i = typeof(id) === Number ? id : parseInt(id);
+    console.log("audio Cargado :",music_url[i].url)
+    audioSource.src = music_url[i].url;
+    audioNameDisplay.textContent = music_url[i].nombre;
     audio.load();
-
-    audioNameDisplay.textContent = music_url[0].nombre;
-    console.log("music_url[0].nombre;:", music_url[0].nombre)
+    audio.play();
+    document.getElementById("img_play_pause").src = "img/pause.png";
+    console.log("music_url[0].nombre;:", music_url[i].nombre)
 }
 
 
@@ -102,7 +110,6 @@ const ctx = canvas.getContext('2d');
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    let index_music = 0;
 
 
     const playOpause = document.getElementById("playOpause");
@@ -138,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log("=", totalTiempo);
 
-    let isPause = true;
     playOpause.addEventListener('click', function () {
         if (isPause) {
             audio.play();
@@ -226,7 +232,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //////fin de dibujar las barras
 });
-
+audio.addEventListener('ended', function() { 
+    let boton = document.getElementById('bAdelante');
+    boton.click(); 
+    console.log("El audio ha terminado."); // También puedes usar esto para otras acciones
+});
 
 const container = document.getElementById("container");
 const valueTextBlur = document.getElementById("valueTextBlur");
@@ -235,21 +245,15 @@ function cambiarBlur(blur) {
     console.log(DataBD)
     container.style.filter = "blur(" + blur + "px)";
     valueTextBlur.textContent = "Blur(" + blur + "px)";
-}
-function abrirVentanaAdd() {
-    document.getElementById("ventanaAdd").style.display = ""
-}
-function cerrarVentanaAdd() {
-    document.getElementById("ventanaAdd").style.display = "none"
+} 
 
+function cerrarVentana(id){
+    document.getElementById(id).style.display = "none"
 }
+function abrirVentana(id){
+    document.getElementById(id).style.display = ""
+} 
 
-function abrirVentanaConfig() {
-    document.getElementById("ventanaConfig").style.display = "";
-}
-function cerrarVentanaConfig() {
-    document.getElementById("ventanaConfig").style.display = "none";
-}
 function cambiarFondo(src) {
     DataBD.imgFondo = src;
     document.getElementById("container").style.backgroundImage = `url(${src})`;
@@ -259,4 +263,22 @@ function seleccionarColor(c) {
     DataBD.colorFrecuencia = c;
     console.log(c);
 }
-
+function actualizarLista(){
+    const domListMusic = document.getElementById("content-list");
+    domListMusic.innerHTML=``;
+    for (let i = 0; i < music_url.length; i++) {
+        domListMusic.innerHTML+=
+        `<div class="musicInList">
+            <div style="width: 5%;margin-left: 2%;"> 🎵</div>
+            <div style="width: 70%;margin-left: 5%;"><marquee>${music_url[i].nombre}</marquee></div>
+            <div style="width: 13%;margin-left: 2%;"><button onclick="cargarAudio(${i})">play</button>
+        </div>`
+        
+    }
+} 
+function reproducirDesdeTiempo(segundos) {
+    console.log(segundos)
+    let audioPlayer = document.getElementById('audio');
+    audioPlayer.currentTime = segundos; // Establece el tiempo desde donde comenzará a reproducir
+    audioPlayer.play(); // Reproduce el audio
+}

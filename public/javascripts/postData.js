@@ -50,42 +50,51 @@ function obtenerDatos() {
         });
 
 }
-
 function addUrlMusic() {
+
     const nombre = document.getElementById("nombreAudio").value;
     const urlAdio = document.getElementById("urlAudio").value;
     if (nombre.length > 0 && urlAdio.length > 0) {
-        let url_direct = "https://dl.dropboxusercontent.com" + urlAdio.slice(23, urlAdio.length - 5);
-        console.log("nombre:", nombre);
-        console.log(url_direct);
-        const music_data = {
-            nombre: nombre,
-            url: url_direct,
-            id: "music"
+        if (urlAdio.slice(0, 24) === "https://www.dropbox.com/") {
+            let url_direct = "https://dl.dropboxusercontent.com" + urlAdio.slice(23, urlAdio.length - 5);
+            
+            console.log(url_direct);
+            const music_data = {
+                nombre: nombre,
+                url: url_direct,
+                id: "music"
+            }
+            //vaciar campos de texto
+            document.getElementById("nombreAudio").value="";
+            document.getElementById("urlAudio").value="";
+            //Realizar la solicitud fetch
+            fetch('/addUrlMusicDropbox', {
+                method: 'POST', // Método HTTP
+                headers: {
+                    'Content-Type': 'application/json' // Indica que estamos enviando JSON
+                },
+                body: JSON.stringify(music_data) // Convierte el objeto data a una cadena JSON
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json(); // Si el servidor devuelve JSON, parsea el cuerpo de la respuesta
+                })
+                .then(data => {
+                    music_url.push(music_data);
+                    actualizarLista();
+                    console.log(music_data)
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        } else {
+            alert("Seleccione una url de dropbox Valida..")
         }
-        //Realizar la solicitud fetch
-        fetch('/addUrlMusicDropbox', {
-            method: 'POST', // Método HTTP
-            headers: {
-                'Content-Type': 'application/json' // Indica que estamos enviando JSON
-            },
-            body: JSON.stringify(music_data) // Convierte el objeto data a una cadena JSON
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json(); // Si el servidor devuelve JSON, parsea el cuerpo de la respuesta
-            })
-            .then(data => {
-                music_url.push(music_data)
-                console.log(music_data)
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
     } else {
+        alert("Ingrese una url")
     }
 }
 
@@ -111,10 +120,10 @@ function addUrlImg() {
         .then(data => {
             const selectElement = document.getElementById('select_img');
             // Crea un nuevo elemento <option>
-            const nuevaOpcion = document.createElement('option'); 
+            const nuevaOpcion = document.createElement('option');
             // Establece el valor y el texto de la opción
             nuevaOpcion.value = url_direct;
-            nuevaOpcion.textContent = `img${img_index}.jpg`; 
+            nuevaOpcion.textContent = `img${img_index}.jpg`;
             // Agrega la nueva opción al <select>
             selectElement.appendChild(nuevaOpcion);
             console.log('Success:', data);
@@ -123,4 +132,4 @@ function addUrlImg() {
             console.error('Error:', error);
         });
 }
-obtenerDatos(); 
+obtenerDatos();

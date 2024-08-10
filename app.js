@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-//coneccion a la base de datos mongodb
+//conexion a la base de datos mongodb
 const conn = require('./config/conexionMongodb');
 
 //fin para la conexion a la base de datos.
