@@ -127,6 +127,7 @@ function addUrlImg() {
             // Agrega la nueva opción al <select>
             selectElement.appendChild(nuevaOpcion);
             console.log('Success:', data);
+            document.getElementById("urlImg").value =""
         })
         .catch((error) => {
             console.error('Error:', error);
