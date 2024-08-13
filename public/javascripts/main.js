@@ -1,82 +1,21 @@
-
-let img_index = 0;
-let isPause = true;
-let index_music = 0;
-
-
-function addImgSelect(data) {
-    const selcect = document.getElementById("select_img"); 
-    cambiarFondo(data[0].urlImg);
-    for (let i = 0; i < data.length; i++) {
-        selcect.innerHTML+= `<option value="${data[i].urlImg}">img${i}.jpg</option>`
-        console.log(data[i]);
-        img_index++;
-    }
-}
-function getImgs() {
-    fetch("/getImgs", {
-        method: 'POST', // Método HTTP
-        headers: {
-            'Content-Type': 'application/json' // Indica que estamos enviando JSON
-        }
-        , body: JSON.stringify({ id: "img" }) // Convierte el objeto data a una cadena JSON
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json(); // Si el servidor devuelve JSON, parsea el cuerpo de la respuesta
-        })
-        .then(data => {
-            console.log("dataimgs_urls::",data)
-            addImgSelect(data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-
-}
-getImgs();
-
 function optenerNumero(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-//const colors = ["#0f99dd", "#35bbdd", "#68dca7", "#e3f46c", "#fcfd61", "#fecf4f", "#fea43d", "#fa4815", "#fa4815"];
-const colors = ['#00FF90', '#00FF6C', '#00FF48', '#00FF24', '#00FF00', '#24FF00', '#48FF00', '#6CFF00', '#90FF00', '#B4FF00', '#D8FF00', '#FFFF00', '#FFD800', '#FFB400', '#FF9000', '#FF6C00', '#FF4800', '#FF2400', '#FF0000'];
 
 function obtenerColor(v) {
     var z = v / 255
     if (z < 0) { z = 0 } else if (z > 1) { z = 1 } else if (isNaN(z)) { z = 0 }
     return colors[Math.floor((colors.length - 1) * z)]
 }
-let music_url = [];
-function getMusic() {
-    fetch("/getMusic", {
-        method: 'POST', // Método HTTP
-        headers: {
-            'Content-Type': 'application/json' // Indica que estamos enviando JSON
-        }
-        , body: JSON.stringify({ id: "music" }) // Convierte el objeto data a una cadena JSON
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json(); // Si el servidor devuelve JSON, parsea el cuerpo de la respuesta
-        })
-        .then(data => {
-            music_url = data;
-            actualizarLista();
-            //cargarAudio(0); 
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
 
-}
-getMusic();
+
+let img_index = 0;
+let isPause = true;
+let index_music = 0;
+let music_url = [];
+//const colors = ["#0f99dd", "#35bbdd", "#68dca7", "#e3f46c", "#fcfd61", "#fecf4f", "#fea43d", "#fa4815", "#fa4815"];
+const colors = ['#00FF90', '#00FF6C', '#00FF48', '#00FF24', '#00FF00', '#24FF00', '#48FF00', '#6CFF00', '#90FF00', '#B4FF00', '#D8FF00', '#FFFF00', '#FFD800', '#FFB400', '#FF9000', '#FF6C00', '#FF4800', '#FF2400', '#FF0000'];
+
 const DataBD = {
     colorFrecuencia: "",
     imgFondo: "",
@@ -84,15 +23,30 @@ const DataBD = {
     id: '1b3b41fc34d2453ccf321dce_1'
 }
 
+
 const audio = document.getElementById('audio');
 const audioSource = document.getElementById('audioSource');
-
 const audioNameDisplay = document.getElementById('audioName');
 
+const canvas = document.getElementById('canvas');
+const cCava = { x: 0, y: canvas.height / 2 }
+const ctx = canvas.getContext('2d');
+function addImgSelect(data) {
+    const selcect = document.getElementById("select_img");
+    data.forEach(element => {
+        const option = document.createElement('option');
+        const name = (element.urlImg).slice(63, (element.urlImg).indexOf('?'))
+        option.value = element.urlImg;
+        option.text = name;
+        selcect.appendChild(option);
+    });
+}
+
+
 function cargarAudio(id) {
-    isPause=false;
-    let i = typeof(id) === Number ? id : parseInt(id);
-    console.log("audio Cargado :",music_url[i].url)
+    isPause = false;
+    let i = typeof (id) === Number ? id : parseInt(id);
+    console.log("audio Cargado :", music_url[i].url)
     audioSource.src = music_url[i].url;
     audioNameDisplay.textContent = music_url[i].nombre;
     audio.load();
@@ -101,16 +55,7 @@ function cargarAudio(id) {
     console.log("music_url[0].nombre;:", music_url[i].nombre)
 }
 
-
-
-
-const canvas = document.getElementById('canvas');
-const cCava = { x: 0, y: canvas.height / 2 }
-const ctx = canvas.getContext('2d');
-
 document.addEventListener('DOMContentLoaded', function () {
-
-
 
     const playOpause = document.getElementById("playOpause");
     const currentTimeDisplay = document.getElementById('currentTime');
@@ -145,7 +90,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log("=", totalTiempo);
 
+
+
+    let audioContext;
+
+    let analyser// = audioContext.createAnalyser();
+    let source// = audioContext.createMediaElementSource(audio);
+    //source.connect(analyser);
+    //analyser.connect(audioContext.destination);
+    //analyser.fftSize = 256;//32, 64, 128, 256, 512, 1024, 2048 
+
+    let bufferLength// = analyser.frequencyBinCount;
+    let dataArray// = new Uint8Array(bufferLength);
+
     playOpause.addEventListener('click', function () {
+    console.log(!(!audioContext))
+
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            analyser.fftSize = 256;//32, 64, 128, 256, 512, 1024, 2048 
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+        }
         if (isPause) {
             audio.play();
             isPause = false;
@@ -179,18 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
     volumeControl.addEventListener('input', function () {
         audio.volume = volumeControl.value;
     });
-    ////////dibujar las barras 
-
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-    analyser.fftSize = 256;//32, 64, 128, 256, 512, 1024, 2048 
-
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
+    ////////dibujar las barras  
     function draw() {
         //document.getElementById("reproducStyle").style.padding = dataArray[parseInt(bufferLength / 2)] == 0 ? "15px" : ((20 * dataArray[parseInt(bufferLength / 2)]) / 255 + "px");
         requestAnimationFrame(draw);
@@ -232,9 +191,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //////fin de dibujar las barras
 });
-audio.addEventListener('ended', function() { 
+audio.addEventListener('ended', function () {
     let boton = document.getElementById('bAdelante');
-    boton.click(); 
+    boton.click();
     console.log("El audio ha terminado."); // También puedes usar esto para otras acciones
 });
 
@@ -245,14 +204,14 @@ function cambiarBlur(blur) {
     console.log(DataBD)
     container.style.filter = "blur(" + blur + "px)";
     valueTextBlur.textContent = "Blur(" + blur + "px)";
-} 
+}
 
-function cerrarVentana(id){
+function cerrarVentana(id) {
     document.getElementById(id).style.display = "none"
 }
-function abrirVentana(id){
+function abrirVentana(id) {
     document.getElementById(id).style.display = ""
-} 
+}
 
 function cambiarFondo(src) {
     DataBD.imgFondo = src;
@@ -263,19 +222,19 @@ function seleccionarColor(c) {
     DataBD.colorFrecuencia = c;
     console.log(c);
 }
-function actualizarLista(){
+function actualizarLista() {
     const domListMusic = document.getElementById("content-list");
-    domListMusic.innerHTML=``;
+    domListMusic.innerHTML = ``;
     for (let i = 0; i < music_url.length; i++) {
-        domListMusic.innerHTML+=
-        `<div class="musicInList">
+        domListMusic.innerHTML +=
+            `<div class="musicInList">
             <div style="width: 5%;margin-left: 2%;"> 🎵</div>
             <div style="width: 70%;margin-left: 5%;"><marquee>${music_url[i].nombre}</marquee></div>
             <div style="width: 13%;margin-left: 2%;"><button onclick="cargarAudio(${i})">play</button>
         </div>`
-        
+
     }
-} 
+}
 function reproducirDesdeTiempo(segundos) {
     console.log(segundos)
     let audioPlayer = document.getElementById('audio');

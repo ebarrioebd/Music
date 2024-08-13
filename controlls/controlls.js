@@ -13,8 +13,7 @@ async function buscarConfig(req, res) {
         res.send(data); 
 }
 async function buscarImgs(req, res) { 
-        const data = await UrlImg.find({});
-        console.log("UrlImgUrlImg::", data);
+        const data = await UrlImg.find({}); 
         res.send(data); 
 }
 
