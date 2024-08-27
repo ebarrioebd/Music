@@ -74,7 +74,7 @@ async function getDataConfig() {
             throw new Error("Error en la solicitud.", response.statusText)
         }
         const data = await response.json();
-
+        console.log("dataConfig:",data)
         DataBD.blurFondo = data[0].blurFondo;
         DataBD.colorFrecuencia = data[0].colorFrecuencia;
         DataBD.imgFondo = data[0].imgFondo;
@@ -84,6 +84,7 @@ async function getDataConfig() {
         console.log('Success:', DataBD);
 
     } catch (error) {
+        console.log("Error:",error)
         alert(error)
     };
 }

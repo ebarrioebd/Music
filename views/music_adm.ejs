@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musics</title>
+  <style>
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+      width: 150px;
+      border-radius: 5px;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    img {
+      height: -webkit-fill-available;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .content-img {
+      background-position: center;
+      background-size: cover;
+      height: 55%;
+      background-repeat: no-repeat;
+    }
+
+    .container {
+      word-wrap: break-word;
+      font-size: small;
+      height: 45%;
+      padding: 2px 16px;
+    }
+
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .content>div {
+      margin: 10px;
+    }
+
+    button {
+      width: 40%;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include("./partials/menu") -%>
+    <div class="content">
+      <% array.forEach(function(item,index){ %>
+        <div class="card" id="<%= index %>">
+          <div class="container">
+            <div style="height: 30%;">
+              <h4>
+                <marquee>
+                  <%= item.nombre %>
+                </marquee>
+              </h4>
+            </div>
+            <div style="width: 100%;height: 50%; display: flex;align-items: center; justify-content: space-between;">
+              <button onclick="descargar('<%= item.url %>')">Desc</button>
+              <button onclick="eliminar('<%= index %>','<%= item.id_usuario %>','<%= item._id %>')">Elim</button>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+    </div>
+    <script>
+      function descargar(url) {
+        window.open(url, '_blank');
+      }
+      async function eliminar(id_div, id_usuario, _id) {
+        try {
+          const response = await fetch('/eliminarMusic', {
+            cache: 'no-cache',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+            ,
+            body: JSON.stringify({ id_usuario: id_usuario, _id: _id })
+          });
+          if (!response.ok) {
+            throw new Error("Error en la solisitud...")
+          }
+          const data = await response.json();
+          console.log(data);
+          eliminarDiv(id_div)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      function eliminarDiv(id_div) {
+        const div = document.getElementById(id_div);
+        // Elimina el div del DOM
+        if (div) {
+          div.remove();
+          console.log('Div eliminado');
+        } else {
+          console.log('Div no encontrado');
+        }
+      }
+    </script>
+</body>
+
+</html>

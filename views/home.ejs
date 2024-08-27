@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <style>
-        body{
-            background: rgb(0, 0, 0);
-            color: green;
-        }
-    </style>
+  <meta charset="UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <style>
+    body { 
+    }
+  </style>
 </head>
+
 <body>
-    
+  <%- include("./partials/menu") -%>
+  <%= usuario %>
+  <br>
+    <a href="/">Music</a>
+    <br>
+    <a href="/imgs_admins">Administrar imgs</a>
+    <br>
+    <a href="/logout">Logout</a>
 </body>
+
 </html>

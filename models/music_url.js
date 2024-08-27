@@ -4,6 +4,7 @@ const musics_urlsSchema = new mongoose.Schema({
     nombre: String,
     url: String,
     id: {type:String, default:"music"},
+    id_usuario:{type:String,required:true},
     created_at: { type: Date, default: Date.now }
 });
 

@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const urlImgSchema = new mongoose.Schema({
     urlImg:String, 
     id: { type: String, default:"img"},
+    id_usuario:{type:String,required:true},
     created_at: { type: Date, default: Date.now}
 });
 

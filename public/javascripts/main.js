@@ -241,3 +241,4 @@ function reproducirDesdeTiempo(segundos) {
     audioPlayer.currentTime = segundos; // Establece el tiempo desde donde comenzará a reproducir
     audioPlayer.play(); // Reproduce el audio
 }
+
